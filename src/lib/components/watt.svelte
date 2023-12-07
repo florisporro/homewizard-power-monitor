@@ -14,6 +14,7 @@
 			unit = 'kW';
 		} else {
 			displayPower = Math.round(power);
+			unit = 'W';
 		}
 
 		if (lastPower !== undefined && colorize) {
