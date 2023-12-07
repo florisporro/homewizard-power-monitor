@@ -13,7 +13,7 @@
 			displayPower = Number((power / 1000).toFixed(2));
 			unit = 'kW';
 		} else {
-			displayPower = power;
+			displayPower = Math.round(power);
 		}
 
 		if (lastPower !== undefined && colorize) {
