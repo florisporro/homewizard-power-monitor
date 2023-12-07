@@ -8,10 +8,13 @@
 
 	let data: Powermeter;
 	let alertsEnabled: boolean = false;
+	let location: string = 'office'; // Default location
 
 	onMount(async () => {
 		const fetchData = async () => {
-			const response = await fetch('http://192.168.15.84/api/v1/data');
+			const response = await fetch(
+				`http://${location === 'office' ? '192.168.15.84' : '192.168.10.21'}/api/v1/data`
+			);
 			const jsonData = await response.json();
 			data = jsonData;
 		};
@@ -19,6 +22,26 @@
 		setInterval(fetchData, 1000);
 		setInterval(calculateAverage, 5000);
 	});
+
+	$: {
+		if (location === 'studio') {
+			reset();
+		} else {
+			reset();
+		}
+	}
+
+	function reset() {
+		data = {};
+		total_power_w = [];
+		power_l1_w = [];
+		power_l2_w = [];
+		power_l3_w = [];
+		avg_total_power_w = 0;
+		avg_power_l1_w = 0;
+		avg_power_l2_w = 0;
+		avg_power_l3_w = 0;
+	}
 
 	function calculateAverage() {
 		if (typeof data?.active_power_w === 'number') total_power_w.push(data.active_power_w);
@@ -101,6 +124,13 @@
 	<div class="text-center mt-4">
 		<label for="alerts">Sound notifications</label>
 		<input type="checkbox" id="alerts" bind:checked={alertsEnabled} />
+		<div id="location">
+			<label for="location">Location</label><br />
+			<input type="radio" id="office" name="location" value="office" bind:group={location} />
+			<label for="office">Office</label><br />
+			<input type="radio" id="studio" name="location" value="studio" bind:group={location} />
+			<label for="studio">Studio</label>
+		</div>
 	</div>
 	{#if exceeding.length > 0}
 		<div
