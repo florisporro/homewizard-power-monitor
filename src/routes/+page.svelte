@@ -13,7 +13,7 @@
 	onMount(async () => {
 		const fetchData = async () => {
 			const response = await fetch(
-				`http://${location === 'office' ? '192.168.15.84' : '192.168.10.21'}/api/v1/data`
+				`http://${location === 'office' ? '192.168.10.22' : '192.168.10.21'}/api/v1/data`
 			);
 			const jsonData = await response.json();
 			data = jsonData;
